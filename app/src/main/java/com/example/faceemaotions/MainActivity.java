@@ -42,6 +42,7 @@ public class MainActivity extends AppCompatActivity {
         {
 
             image.setImageBitmap(sendImage(bitmap));
+            Uploader uploader = new Uploader(bitmap,"http://192.168.1.101");
         }
         else
         {
