@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -35,10 +36,16 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 captureImage=new CaptureImage((ImageView) findViewById(R.id.image),context);
+                startActivityForResult(captureImage.intent, 0);
+
             }
         });
     }
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        captureImage.setImage();
+    }
 
 
 

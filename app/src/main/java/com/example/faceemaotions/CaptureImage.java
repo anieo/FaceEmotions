@@ -19,14 +19,15 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class CaptureImage extends AppCompatActivity {
+public class CaptureImage  {
     String mCurrentPhotoPath;
-    ImageView image;
+    public ImageView image;
 
-    Intent intent ;
-Context context;
-    CaptureImage( ImageView image,Context context){
-        image=this.image;
+    public Intent intent ;
+    private Context context;
+
+    CaptureImage( ImageView images,Context context){
+        image=images;
         intent= new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         this.context=context;
         if (intent.resolveActivity(context.getPackageManager()) != null) {
@@ -38,34 +39,40 @@ Context context;
             }
             if (photoFile != null) {
                 Uri photoURI = FileProvider.getUriForFile(context,
-                        "com.example.android.fileprovider",
-                        photoFile);
+                        "com.example.android.fileprovider",photoFile);
                 intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                startActivityForResult(intent, 1);
+                System.out.println(photoFile.getAbsolutePath());
+
             }
 
 
         };
     }
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Bitmap bitmap =(Bitmap)data.getExtras().get("data");
+
+    protected void setImage()
+    {
+        Bitmap bitmap=null;
+        try{
+            Uri tmp = (Uri)intent.getExtras().get("output");
+            bitmap =MediaStore.Images.Media.getBitmap(context.getContentResolver(),tmp);
+        }
+        catch(IOException ex){
+            System.out.println(ex.toString()+"\nopps no image found");
+        }
+        // Bitmap.createBitmap(captureImage.photoFile.getAbsoluteFile())
         if(bitmap!=null)
         {
-
             image.setImageBitmap(sendImage(bitmap));
             Uploader uploader = new Uploader(bitmap,"http://192.168.1.101");
         }
         else
         {
-            Toast.makeText(this, "No image Tacken", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "No image Tacken", Toast.LENGTH_SHORT).show();
         }
-
     }
-
     protected Bitmap sendImage(Bitmap bitmap)
     {
+
         return  bitmap;
 
     }
@@ -74,20 +81,19 @@ Context context;
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
-//        File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File storageDir = new File("/storage/0000-208A/", "Neger");
-        System.out.println(storageDir.getAbsolutePath());
-        storageDir.mkdir();
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
+        File storageDir = context.getExternalFilesDir(Environment.DIRECTORY_PICTURES);
 
+        System.out.println(storageDir.getAbsolutePath());
+
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+        System.out.println(image.getAbsolutePath());
         // Save a file: path for use with ACTION_VIEW intents
         mCurrentPhotoPath = image.getAbsolutePath();
 
-        System.out.println(image.getAbsolutePath());
         if(image.exists())
         {
             System.out.println("yay\n\r");
