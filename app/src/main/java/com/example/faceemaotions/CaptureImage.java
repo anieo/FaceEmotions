@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class CaptureImage  {
-    String mCurrentPhotoPath;
+
     public ImageView image;
 
     public Intent intent ;
@@ -62,6 +62,7 @@ public class CaptureImage  {
         // Bitmap.createBitmap(captureImage.photoFile.getAbsoluteFile())
         if(bitmap!=null)
         {
+
             image.setImageBitmap(sendImage(bitmap));
             Uploader uploader = new Uploader(bitmap,"http://192.168.1.101");
         }
@@ -70,9 +71,10 @@ public class CaptureImage  {
             Toast.makeText(context, "No image Tacken", Toast.LENGTH_SHORT).show();
         }
     }
+
     protected Bitmap sendImage(Bitmap bitmap)
     {
-
+        //call for Uploader
         return  bitmap;
 
     }
@@ -86,18 +88,10 @@ public class CaptureImage  {
         System.out.println(storageDir.getAbsolutePath());
 
         File image = File.createTempFile(
-                imageFileName,
-                ".jpg",
-                storageDir
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
         );
-        System.out.println(image.getAbsolutePath());
-        // Save a file: path for use with ACTION_VIEW intents
-        mCurrentPhotoPath = image.getAbsolutePath();
-
-        if(image.exists())
-        {
-            System.out.println("yay\n\r");
-        }
 
         return image;
     }
