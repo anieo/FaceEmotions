@@ -22,7 +22,6 @@ import java.util.Date;
 public class CaptureImage  {
 
     public ImageView image;
-
     public Intent intent ;
     private Context context;
 
@@ -45,11 +44,24 @@ public class CaptureImage  {
 
             }
 
-
         };
     }
+    //will be modified after Uploader is finished
+    //should receive a new bitmap from the model
+    protected void setImage(Bitmap nBitmap)
+    {
 
-    protected void setImage()
+        if(nBitmap!=null)
+        {
+            image.setImageBitmap(nBitmap);
+        }
+        else
+        {
+            Toast.makeText(context, "No image received", Toast.LENGTH_SHORT).show();
+        }
+    }
+    //return the captured image
+    protected Bitmap getImage()
     {
         Bitmap bitmap=null;
         try{
@@ -59,26 +71,10 @@ public class CaptureImage  {
         catch(IOException ex){
             System.out.println(ex.toString()+"\nopps no image found");
         }
-        // Bitmap.createBitmap(captureImage.photoFile.getAbsoluteFile())
-        if(bitmap!=null)
-        {
-
-            image.setImageBitmap(sendImage(bitmap));
-            Uploader uploader = new Uploader(bitmap,"http://192.168.1.101");
-        }
-        else
-        {
-            Toast.makeText(context, "No image Tacken", Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    protected Bitmap sendImage(Bitmap bitmap)
-    {
-        //call for Uploader
         return  bitmap;
 
     }
-    //Create A file image to save the taken Image in to get better Quality
+    //Create A file image to save the taken image in it to get a better Quality
     private File createImageFile() throws IOException {
         // Create an image file name
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());

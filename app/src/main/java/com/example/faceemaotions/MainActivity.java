@@ -28,23 +28,26 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        Button btn = (Button)findViewById(R.id.btnCamera);
+        Button cameraBtn = (Button)findViewById(R.id.btnCamera);
         URL="http://192.168.1.110";
 
         context=this;
-        btn.setOnClickListener(new View.OnClickListener() {
+        cameraBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //class that Handels the the imae
                 captureImage=new CaptureImage((ImageView) findViewById(R.id.image),context);
+                //start the camera intent
                 startActivityForResult(captureImage.intent, 0);
-
             }
         });
     }
+
+    // onActivityResult Handels the results of the Camera
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        captureImage.setImage();
+        captureImage.setImage(captureImage.getImage());
     }
 
 
