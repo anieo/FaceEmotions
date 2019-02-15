@@ -79,11 +79,11 @@ public class Uploader
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
                 System.out.println("user Info :" + response.body().getAsJsonObject());
-                newImageURl= BASE_URL + response.body().getAsJsonObject().get("Data").getAsString();
+                newImageURl= BASE_URL +"/"+response.body().getAsJsonObject().get("Data").getAsString();
                 modelResult= Integer.parseInt(response.body().getAsJsonObject().get("Name").getAsString());
 
                 Toast.makeText(context,Integer.toString(modelResult),Toast.LENGTH_LONG).show();
-
+                System.out.println(newImageURl);
                 Picasso.with(context).load(newImageURl).into(image);
 
 
