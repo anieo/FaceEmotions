@@ -78,13 +78,21 @@ public class Uploader
         call.enqueue(new Callback<JsonObject>() {
             @Override
             public void onResponse(Call<JsonObject> call, Response<JsonObject> response) {
-                System.out.println("user Info :" + response.body().getAsJsonObject());
-                newImageURl= BASE_URL +"/"+response.body().getAsJsonObject().get("Data").getAsString();
-                modelResult= Integer.parseInt(response.body().getAsJsonObject().get("Name").getAsString());
+                int status=response.code() ;
+                if(status==422)
+                {
+                    Toast.makeText(context,"Falty Picture",Toast.LENGTH_SHORT).show();;
+                }
+                else
+                {
+                    System.out.println("user Info :" + response.body().getAsJsonObject());
+                    newImageURl= BASE_URL +"/"+response.body().getAsJsonObject().get("Data").getAsString();
+                    modelResult= Integer.parseInt(response.body().getAsJsonObject().get("emotion").getAsString());
 
-                Toast.makeText(context,Integer.toString(modelResult),Toast.LENGTH_LONG).show();
-                System.out.println(newImageURl);
-                Picasso.with(context).load(newImageURl).into(image);
+                    Toast.makeText(context,Integer.toString(modelResult),Toast.LENGTH_LONG).show();
+                    System.out.println(newImageURl);
+                    Picasso.with(context).load(newImageURl).into(image);
+                }
 
 
             }
